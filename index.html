@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Rules & Requirements</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .sports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .sport-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .sport-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            border-color: #667eea;
+        }
+
+        .sport-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #f5f7ff 0%, #e8edff 100%);
+        }
+
+        .sport-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        .sport-card .emoji {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .sport-card p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .sport-details {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .sport-details.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .detail-section {
+            margin-bottom: 30px;
+        }
+
+        .detail-section h3 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .detail-section h4 {
+            color: #764ba2;
+            font-size: 1.3rem;
+            margin: 20px 0 10px 0;
+        }
+
+        .detail-section p, .detail-section li {
+            line-height: 1.6;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .detail-section ul {
+            margin-left: 20px;
+        }
+
+        .requirements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .requirement-item {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .back-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 30px auto;
+            display: block;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: white;
+        }
+
+        .search-box:focus {
+            outline: none;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏆 Sports Rules & Requirements</h1>
+            <p>Learn the rules, requirements, and gameplay of popular sports</p>
+        </div>
+
+        <input type="text" class="search-box" placeholder="Search for a sport..." id="searchBox">
+
+        <div id="sportsGrid" class="sports-grid">
+            <!-- Sports cards will be generated by JavaScript -->
+        </div>
+
+        <div id="sportDetails" class="sport-details">
+            <button class="back-btn" onclick="showSportsList()">← Back to Sports</button>
+            <div id="detailContent">
+                <!-- Sport details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sportsData = {
+            football: {
+                name: "Football (Soccer)",
+                emoji: "⚽",
+                description: "The world's most popular sport played with feet and a ball",
+                rules: [
+                    "Two teams of 11 players each",
+                    "Game duration: 90 minutes (two 45-minute halves)",
+                    "Only goalkeepers can use hands within their penalty area",
+                    "Offside rule applies when attacking",
+                    "Yellow and red cards for misconduct",
+                    "Goal scored when ball completely crosses goal line"
+                ],
+                requirements: {
+                    "Field": "100-130 yards long, 50-100 yards wide",
+                    "Ball": "Spherical, circumference 27-28 inches",
+                    "Goals": "8 yards wide, 8 feet high",
+                    "Players": "11 per team (10 outfield + 1 goalkeeper)",
+                    "Equipment": "Jersey, shorts, socks, shin guards, footwear"
+                },
+                howToPlay: [
+                    "Objective: Score more goals than the opponent",
+                    "Players pass, dribble, and shoot using feet, head, or body (except hands)",
+                    "Goalkeeper defends the goal and can use hands in penalty area",
+                    "Free kicks awarded for fouls, corners for ball going out",
+                    "Substitutions allowed (usually 3-5 per team)",
+                    "Referee controls the match and can add stoppage time"
+                ]
+            },
+            basketball: {
+                name: "Basketball",
+                emoji: "🏀",
+                description: "Fast-paced indoor sport where teams shoot at elevated hoops",
+                rules: [
+                    "Two teams of 5 players each",
+                    "Game duration: 4 quarters of 12 minutes (NBA) or 10 minutes (FIBA)",
+                    "Shot clock: 24 seconds to attempt a shot",
+                    "3-point line: shots beyond this line worth 3 points",
+                    "Personal fouls limit: 6 fouls (NBA) or 5 fouls (FIBA)",
+                    "Free throws awarded for certain fouls"
+                ],
+                requirements: {
+                    "Court": "94 feet long, 50 feet wide",
+                    "Hoop": "10 feet high, 18-inch diameter rim",
+                    "Ball": "Circumference 29.5-30 inches",
+                    "Players": "5 per team on court",
+                    "Equipment": "Jersey, shorts, basketball shoes"
+                },
+                howToPlay: [
+                    "Objective: Score more points by shooting ball through opponent's hoop",
+                    "Dribble to move with the ball, pass to teammates",
+                    "Shooting: 2 points for regular shots, 3 points beyond arc, 1 point for free throws",
+                    "Defense: Block shots, steal ball, force turnovers",
+                    "Violations: Traveling, double dribble, shot clock violation",
+                    "Substitutions allowed during stoppages"
+                ]
+            },
+            tennis: {
+                name: "Tennis",
+                emoji: "🎾",
+                description: "Racket sport played on a rectangular court with a net",
+                rules: [
+                    "Singles (1v1) or doubles (2v2) matches",
+                    "Best of 3 or 5 sets format",
+                    "Scoring: 15, 30, 40, game (must win by 2 points if deuce)",
+                    "Sets won by first to 6 games (must lead by 2)",
+                    "Tiebreak at 6-6 in most sets",
+                    "Ball must land within court boundaries"
+                ],
+                requirements: {
+                    "Court": "78 feet long, 27 feet wide (singles), 36 feet wide (doubles)",
+                    "Net": "3 feet high at center, 3.5 feet at posts",
+                    "Racket": "Maximum 29 inches long, 12.5 inches wide",
+                    "Ball": "2.57-2.70 inches diameter",
+                    "Players": "1 or 2 per side"
+                },
+                howToPlay: [
+                    "Objective: Win more sets than opponent",
+                    "Serve alternates every game, must land in service box",
+                    "Rally continues until ball lands out, hits net, or bounces twice",
+                    "Players can hit ball after one bounce or as a volley",
+                    "Different court surfaces: hard court, clay, grass, carpet",
+                    "Strategy involves placement, power, and court positioning"
+                ]
+            },
+            volleyball: {
+                name: "Volleyball",
+                emoji: "🏐",
+                description: "Team sport where players hit ball over net using hands",
+                rules: [
+                    "Two teams of 6 players each",
+                    "Best of 5 sets (first to 25 points, win by 2)",
+                    "Maximum 3 touches per side before sending over net",
+                    "Players rotate clockwise after winning serve",
+                    "Ball cannot touch ground on your side",
+                    "Cannot hit ball twice in succession"
+                ],
+                requirements: {
+                    "Court": "59 feet long, 29.5 feet wide",
+                    "Net": "7 feet 11.6 inches high (men), 7 feet 4.1 inches (women)",
+                    "Ball": "Circumference 25.6-26.4 inches",
+                    "Players": "6 per team on court",
+                    "Equipment": "Athletic wear, volleyball shoes, knee pads"
+                },
+                howToPlay: [
+                    "Objective: Ground the ball on opponent's side",
+                    "Serve starts each rally from behind baseline",
+                    "Typical sequence: bump (receive), set (prepare), spike (attack)",
+                    "Blocking allowed at the net to defend against attacks",
+                    "Back row players cannot attack above net height",
+                    "Libero is defensive specialist who cannot serve or attack"
+                ]
+            },
+            cricket: {
+                name: "Cricket",
+                emoji: "🏏",
+                description: "Bat-and-ball sport popular in Commonwealth countries",
+                rules: [
+                    "Two teams of 11 players each",
+                    "Innings-based game (each team bats and bowls)",
+                    "Batsmen score runs by hitting ball and running",
+                    "Bowler delivers ball to batsman from opposite end",
+                    "10 ways to get out including bowled, caught, LBW",
+                    "Different formats: Test (5 days), ODI (50 overs), T20 (20 overs)"
+                ],
+                requirements: {
+                    "Pitch": "22 yards long, 10 feet wide",
+                    "Field": "Oval-shaped, varies in size (minimum 150 yards)",
+                    "Wickets": "3 wooden stumps, 2 bails on top",
+                    "Bat": "Maximum 38 inches long, 4.25 inches wide",
+                    "Ball": "Leather, circumference 8.81-9 inches"
+                },
+                howToPlay: [
+                    "Objective: Score more runs than the opposing team",
+                    "Batting team tries to score runs while bowling team tries to dismiss batsmen",
+                    "Runs scored by hitting ball and running between wickets",
+                    "Boundaries: 4 runs if ball reaches boundary, 6 runs if cleared",
+                    "Bowling in overs of 6 balls, bowler changes each over",
+                    "Fielding positions strategically placed around the ground"
+                ]
+            },
+            swimming: {
+                name: "Swimming",
+                emoji: "🏊",
+                description: "Aquatic sport involving different stroke techniques",
+                rules: [
+                    "Individual or relay races in pools or open water",
+                    "Four main strokes: freestyle, backstroke, breaststroke, butterfly",
+                    "Races range from 50m sprint to 1500m distance",
+                    "Swimmers must touch wall at each turn and finish",
+                    "False start results in disqualification",
+                    "Lane assignments based on qualifying times"
+                ],
+                requirements: {
+                    "Pool": "50m (Olympic) or 25m length, 8-10 lanes",
+                    "Depth": "Minimum 2m for competition",
+                    "Equipment": "Swimsuit, goggles, swim cap",
+                    "Starting blocks": "0.5-0.75m high",
+                    "Lane ropes": "Separate lanes and reduce turbulence"
+                },
+                howToPlay: [
+                    "Objective: Complete the distance in fastest time",
+                    "Start: Dive from starting blocks (except backstroke)",
+                    "Stroke technique varies by style - each has specific rules",
+                    "Turns: Touch wall, flip, push off underwater",
+                    "Finish: Touch wall with hand (any stroke except backstroke)",
+                    "Training involves technique, endurance, and speed work"
+                ]
+            }
+        };
+
+        let currentSport = null;
+
+        function generateSportsCards() {
+            const sportsGrid = document.getElementById('sportsGrid');
+            sportsGrid.innerHTML = '';
+            
+            for (const [key, sport] of Object.entries(sportsData)) {
+                const card = document.createElement('div');
+                card.className = 'sport-card';
+                card.onclick = () => showSportDetails(key);
+                
+                card.innerHTML = `
+                    <span class="emoji">${sport.emoji}</span>
+                    <h3>${sport.name}</h3>
+                    <p>${sport.description}</p>
+                `;
+                
+                sportsGrid.appendChild(card);
+            }
+        }
+
+        function showSportDetails(sportKey) {
+            currentSport = sportKey;
+            const sport = sportsData[sportKey];
+            
+            document.getElementById('sportsGrid').style.display = 'none';
+            document.getElementById('sportDetails').classList.add('active');
+            
+            const detailContent = document.getElementById('detailContent');
+            detailContent.innerHTML = `
+                <div class="sport-header">
+                    <h2>${sport.emoji} ${sport.name}</h2>
+                    <p style="font-size: 1.1rem; color: #666; margin: 10px 0 30px 0;">${sport.description}</p>
+                </div>
+                
+                <div class="detail-section">
+                    <h3>📋 Basic Rules</h3>
+                    <ul>
+                        ${sport.rules.map(rule => `<li>${rule}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="detail-section">
+                    <h3>🏟️ Requirements & Equipment</h3>
+                    <div class="requirements-grid">
+                        ${Object.entries(sport.requirements).map(([key, value]) => 
+                            `<div class="requirement-item">
+                                <h4>${key}</h4>
+                                <p>${value}</p>
+                            </div>`
+                        ).join('')}
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h3>🎮 How to Play</h3>
+                    <ul>
+                        ${sport.howToPlay.map(step => `<li>${step}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+
+        function showSportsList() {
+            document.getElementById('sportsGrid').style.display = 'grid';
+            document.getElementById('sportDetails').classList.remove('active');
+            currentSport = null;
+        }
+
+        function setupSearch() {
+            const searchBox = document.getElementById('searchBox');
+            searchBox.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const sportCards = document.querySelectorAll('.sport-card');
+                
+                sportCards.forEach(card => {
+                    const sportName = card.querySelector('h3').textContent.toLowerCase();
+                    const sportDesc = card.querySelector('p').textContent.toLowerCase();
+                    
+                    if (sportName.includes(searchTerm) || sportDesc.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            generateSportsCards();
+            setupSearch();
+        });
+    </script>
+</body>
+</html>
